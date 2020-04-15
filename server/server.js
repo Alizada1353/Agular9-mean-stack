@@ -2,6 +2,9 @@ require("dotenv").config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+const validator = require('./validators/validator');
 
 /** control cross-origin requests */
 const allowedOrigins = process.env.allowedOrigins.split(',');
@@ -17,7 +20,15 @@ app.use(cors({
 }))
 /** control cross-origin requests */
 
+const urlencodedParser = bodyParser.urlencoded({extended: false});
 
+app.get('/signup', jsonParser, (req, res) => {
+    if (validator.checkInputDataNULL(req, res)) return false;
+    if (validator.checkInputDataQuality(req, res)) return false;
+
+    var dbFunctions = require('./models/connector');
+    dbFunctions.createUser(req, res);
+});
 
 app.get('/', (req, res) => res.send('connection successful!'));
 
