@@ -37,5 +37,15 @@ app.post("/signup", function (req, res) {
   dbFunctions.createUser(req, res);
 });
 
+app.post("/login", function (req, res) {
+
+  if (validator.checkInputDataNULL(req, res)) return false;
+  if (validator.checkInputDataQuality(req, res)) return false;
+
+
+  var dbFunctions = require("./models/DB_connector");
+  dbFunctions.loginUser(req, res);
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`))

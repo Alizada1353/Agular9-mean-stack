@@ -1,7 +1,6 @@
 const pool = require('./db_pool_conn');
 
 var password = require('password-hash-and-salt');
-
 const jwt = require('jsonwebtoken');
 
 var resultsNotFound = {
@@ -34,7 +33,7 @@ module.exports = {
             connection.query(sql, values, function (error, results, fields) {
               if (error) {
                 console.log(error);
-                resultsNotFound["errorMessage"] = "emailID already exists.";
+                resultsNotFound["errorMessage"] = "this email id already exists.";
                 return res.send(resultsNotFound);
               } else return res.send(resultsFound);
             });
@@ -65,8 +64,7 @@ module.exports = {
             password(req.body.inputPassword).verifyAgainst(
               results[0].password,
               function (error, verified) {
-                //bcrypt.compare(req.body.inputPassword, results[0].password, function (err, result) {
-                if (result == true) {
+                if (verified == true) {
                   var token = {
                     token: jwt.sign(
                       { email: req.body.inputEmail },
@@ -77,15 +75,14 @@ module.exports = {
                   resultsFound["data"] = token;
                   res.send(resultsFound);
                 } else {
-                  resultsNotFound["errorMessage"] = "Incorrect Password.";
+                  resultsNotFound["errorMessage"] = "password don't match";
                   return res.send(resultsNotFound);
                 }
               }
             );
 
-            // When done with the connection, release it.
-            connection.end(); // Handle error after the release.
-            if (error) throw error; // Don't use the connection here, it has been returned to the pool.
+            connection.release(); 
+            if (error) throw error;
           });
         });
     },
@@ -109,9 +106,9 @@ module.exports = {
             }
             resultsFound["data"] = results[0];
             res.send(resultsFound);
-            // When done with the connection, release it.
-            connection.end(); // Handle error after the release.
-            if (error) throw error; // Don't use the connection here, it has been returned to the pool.
+           
+            connection.release(); 
+            if (error) throw error;
           });
         });
     },
