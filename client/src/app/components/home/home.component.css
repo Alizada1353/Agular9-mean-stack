@@ -12,8 +12,9 @@
 }
 
 .card-img-overlay {
-    background: #0000006b;
+    background:#000000c2;;
     text-align: center;
+    padding: 53px;
 }
 
 .card-image {
@@ -31,10 +32,18 @@ font-family: 'Akronim', cursive; */
     height: 60vh;
 }
 .main-title {
-    margin-top: 4rem;
+    margin-top: 3rem;
     font-weight: bolder;
     font-size: 4rem;
-   
+}
+.card-img-overlay {
+    padding: 36px;
+    margin: 70px;
+    border-radius: 172px;
+}
+
+.card-image {
+    height: 94.7vh;
 }
   /* For mobile phones: */
   /* [class*="col-"] {
